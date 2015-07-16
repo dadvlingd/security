@@ -1,0 +1,42 @@
+nmap使用方法
+1) 获取远程主机的端口信息和识别主机操作系统(Get info about remote host ports and OS detection)nmap -sS -P0 -sV -O <target> 
+< target > 可以是独立IP, 一个主机名 或一个子网
+-sS TCP SYN扫描(也叫半开或隐蔽扫描)
+-P0 选项允许你关闭ICMP ping
+-sV 选项启用版本检测
+-O 表示试图识别远程操作系统
+其它选项:
+-A 选项启用OS指纹和版本检测
+-v 使用两次-v查看细节信息
+nmap -sS -P0 -A -v < target >
+ 
+ 2) 获取开放指定端口的服务器列表(Get list of servers with a specific port open)
+ nmap -sT -p 80 -oG – 192.168.1.* | grep open
+ 改变-p的参数可指定端口，查看nmap主页寻找指定地址范围的不同方式。
+ 3) 获取网络中所有存活的主机：Find all active IP addresses in a network
+ nmap -sP 192.168.0.*
+ 还有许多其它的选项，这个只是一个简单的例子。
+ 另一个选项:
+ nmap -sP 192.168.0.0/24 
+ 针对特定子网
+ 4) ping一个范围内的IP地址(Ping a range of IP addresses)
+ nmap -sP 192.168.1.100-254
+ namp接受多种类型的地址符号，多个目录/范围等。
+ 5)寻找一个给定子网中未使用的ip(Find unused IPs on a given subnet)
+ nmap -T4 -sP 192.168.2.0/24 && egrep “00:00:00:00:00:00″ /proc/net/arp
+ 6) 扫描本地网络中的conficker病毒(Scan for the Conficker virus on your LAN ect.)
+ nmap -PN -T4 -p139,445 -n -v –script=smb-check-vulns –script-args safe=1 192.168.0.1-254
+ 可以把192.168.0.1-256替换成你想要检测的地址。
+ 7) 扫描网络中的非法接入点(Scan Network for Rogue APs.)
+ nmap -A -p1-85,113,443,8080-8100 -T4 –min-hostgroup 50 –max-rtt-timeout 2000 –initial-rtt-timeout 300 –max-retries 3 –host-timeout 20m –max-scan-delay 1000 -oA wapscan 10.0.0.0/8
+ 我使用这个在非常巨大的网络中成功找出多个非法接入点。
+ 8) 在扫描时使用诱骗技术避免引起管理员的注意(Use a decoy while scanning ports to avoid getting caught by the sys admin)
+ sudo nmap -sS 192.168.0.10 -D 192.168.0.2
+ 扫描目标设备/计算机(192.168.0.10）的开放端口并设置一个诱骗地址(192.168.0.2)，在目标的安全日志中将会显示诱骗地址而不是你的IP地址。诱骗地址必须是存活的，检查目标主机的安全日志( /var/log/)确定它是否工作。
+  
+  9) 列出一个子网中的DNS反向记录(List of reverse DNS records for a subnet)
+  nmap -R -sL 209.85.229.99/27 | awk ‘{if($3==”not”)print”(“$2″) no PTR”;else print$3″ is “$2}’ | grep ‘(‘
+  这个命令是使用nmap字在子网中查询DNS反向信息。它会生成子网中的ip地址列表和相应的PTR纪录。你可以在CDIR符号中输入子网 (i.e. /24 for a Class C)，如果你需要查询一个特定的DNS服务器，你可以在-sL后边添加“–dns-servers x.x.x.x”，一些安装版的namp可能需要sudo，我也希望awk是大多数发行版的标准。
+   
+   10) 你的网络中有多少Linux和Windows设备？(How Many Linux And Windows Devices Are On Your Network?)
+   sudo nmap -F -O 192.168.0.1-255 | grep “Running: ” > /tmp/os; echo “$(cat /tmp/os | grep Linux | wc -l) Linux device(s)”; echo “$(cat /tmp/os | grep Windows | wc -l) Window(s) devices”
