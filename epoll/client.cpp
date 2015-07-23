@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
 	// *** Setup socket connection with server
 	CHK2(sock,socket(PF_INET, SOCK_STREAM, 0));
-	CHK(connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0);
+	CHK(connect(sock, (struct sockaddr *)&addr, sizeof(addr)));
 
 	// *** Setup pipe to send messages from child process to parent
 	CHK(pipe(pipe_fd));

@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
                // create new socket connection with server 
                CHK2(sock,socket(PF_INET, SOCK_STREAM, 0));
-               CHK(connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0);
+               CHK(connect(sock, (struct sockaddr *)&addr, sizeof(addr)));
                list_of_clients.push_back(sock);
                if(DEBUG_MODE) printf("Create new test client with fd: %d\n", sock);
 
