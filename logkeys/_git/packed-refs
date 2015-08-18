@@ -1,4 +1,2 @@
 # pack-refs with: peeled fully-peeled 
-7e73bb66ed69b24faff5478ab9d1a225f09c2f2c refs/remotes/origin/issue_49_crypt
-7e73bb66ed69b24faff5478ab9d1a225f09c2f2c refs/remotes/origin/master
-446f98bfb756a05878675114b8981414efb9d665 refs/remotes/origin/wiki
+27ac16fb5de1696e329e508ec4fd563752255ee2 refs/remotes/origin/master
