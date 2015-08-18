@@ -1,30 +1,30 @@
 <Esc>
 1 !
-2 " @
+2 @
 3 #
-4
+4 $
 5 %
-6 &
-7 / {
-8 ( [
-9 ) ]
-0 = }
-+ ? \
-' `
+6 ^
+7 &
+8 *
+9 (
+0 )
+- _
+= +
 <BckSp>
 <Tab>
-q Q @
+q Q
 w W
 e E
 r R
-t T þ
+t T
 y Y
 u U
 i I
 o O
 p P
-å Å
-" ^ ~
+[ {
+] }
 <Enter>
 <LCtrl>
 a A ª
@@ -36,11 +36,11 @@ h H
 j J
 k K
 l L
-ö Ö
-ä Ä
+; :
+' "
 § ½
 <LShft>
-' * ´
+\ |
 z Z
 x X
 c C
@@ -48,9 +48,9 @@ v V
 b B
 n N
 m M µ
-, ;
-. :
-- _
+, <
+. >
+/ ?
 <RShft>
 <KP*>
 <LAlt>
