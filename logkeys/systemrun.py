@@ -24,7 +24,7 @@ def sendMail(theEmail, thePasswd):
     message.set_payload("当前时间" +systemTime+ "\n" +content) #邮件正文
     msg = message.as_string()
 
-    smtp = smtplib.SMTP_SSL("smtp.gmail.com", port=465, timeout=20)
+    #smtp = smtplib.SMTP_SSL("smtp.163.com", port=456, timeout=30)
     #sm.set_debuglevel(1)  #开启debug模式
     smtp.ehlo()            #LJH add
     smtp.starttls()        #使用安全连接
@@ -44,8 +44,8 @@ def myMain(inc, theEmail, thePasswd):
 
 if __name__ == "__main__":
     optObj = optparse.OptionParser()
-    optObj.add_option( "-u", dest = "user", help = "Gmail accoutn")
-    optObj.add_option( "-p", dest = "passwd", help = "Gmail Passwd")
+    optObj.add_option( "-u", dest = "user", help = "mail accoutn")
+    optObj.add_option( "-p", dest = "passwd", help = "mail Passwd")
     (options, args) = optObj.parse_args()
 
     emailName = options.user
