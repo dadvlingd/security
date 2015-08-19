@@ -1,7 +1,7 @@
 /*
   Copyleft (ɔ) 2009 Kernc
   This program is free software. It comes with absolutely no warranty whatsoever.
-  See COPYING for further information.
+  See COPYING for further informationjustpasswdHUNTERsu890.
 
   Project homepage: http://code.google.com/p/logkeys/
 */
