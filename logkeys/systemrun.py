@@ -24,14 +24,14 @@ def sendMail(theEmail, thePasswd):
     message.set_payload("当前时间" +systemTime+ "\n" +content) #邮件正文
     msg = message.as_string()
 
-    smtp = smtplib.SMTP("smtp.exmail.qq.com", port=465, timeout=20)
+    smtp = smtplib.SMTP_SSL("smtp.gmail.com", port=465, timeout=20)
     #sm.set_debuglevel(1)  #开启debug模式
+    smtp.ehlo()            #LJH add
     smtp.starttls()        #使用安全连接
     smtp.login(theEmail, thePasswd)
-    smtp.login(theEmail, thePasswd)
-    smtp.sendmail( "", theEmail, msg)
+    smtp.sendmail( "", theEmail, msg) #SMTP.sendmail(from_addr, to_addrs, msg[, mail_options, rcpt_options]) ：发送邮件。这里要注意一下第三个参数，msg是字符串，表示邮件。我们知道邮件一般由标题，发信人，收件人，邮件内容，附件等构成，发送邮件的时候，要注意msg的格式。这个格式就是smtp协议中定义的格式。
     time.sleep(5)          #避免邮件没有发送完成就调用了
-    quit()
+#    quit()
     smtp.quit()
 
 def perform(inc, theEmail, thePasswd):
