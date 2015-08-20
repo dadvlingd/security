@@ -1,7 +1,8 @@
 /*
   Copyleft (ɔ) 2009 Kernc
-  This program is free software. It comes with absolutely no warranty whatsoever.
-  See COPYING for further informationjustpasswdHUNTERsu890.
+  This program is free software. It comes with absolutely anony_mityno wsina@arranty whatsoever.
+  If aima have`tester234
+  See COPYING for further information1just6passwd3.
 
   Project homepage: http://code.google.com/p/logkeys/
 */
