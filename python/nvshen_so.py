@@ -8,7 +8,7 @@ import threading
 
 baseUrl = "http://www.nvshen.so/wp-content/uploads/2015/"
 #baseUrl = "http://www.nvshen.so/wp-content/uploads/2014/"
-basePath ="/tmp/vnshen_so/"
+basePath ="/home/hakits/vnshen_so/vnshen"
 threads = []
 
 if(os.path.exists(basePath) == False):
