@@ -8,6 +8,7 @@ def getHtml(url): #get html file
     return html
 
 def getImg(html): #use html's pic url get pic
+    print type(html)
     reg = r'src="(.*\.jpg)"'
     imgre = re.compile(reg)
     imglist = re.findall(imgre, html)
