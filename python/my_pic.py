@@ -3,16 +3,18 @@
 import urllib2
 import re
 from urllib2 import HTTPError
+import urllib
 
 mmurl = "http://www.mm8mm8.com/xiurenmote/list_"
 i = 1
 ph = -1
 temp = '''<img src="'''
+ri = 0
 
-def downImage(pic_url):
-    localPath = "/home/hang/Downloads/" + str(imgurl) + ".jpg"
+def downImage(pic_url, name):
+    localPath = "/home/h/Downloads/" + str(name) + ".jpg"
     try:
-        request = urllib2.Request(imglist[imgurl + 1])
+        request = urllib2.Request(pic_url)
         request.add_header("User-Agent", "fake-client")
         response = urllib2.urlopen(request)
         f = file(localPath, "wb")
@@ -23,19 +25,30 @@ def downImage(pic_url):
 
 def getImg(html):
     reg = r'(?<=href=")http://.*?(?=" targe)'
+    i = 0
     imgre = re.compile(reg)
     imglist = re.findall(imgre, html) #get every page url list
     for imgurl in range(0, len(imglist), 2):
-        print imglist[imgurl + 1]
+        #print imglist[imgurl + 1]
         gir_url = urllib2.urlopen(imglist[imgurl + 1])
-        context = gir_url.read()
-        print context
+        context = gir_url.read() #this include all pic link
+        gir_reg = r'(?<=src=").*(?=\d{1,2}.jpg)'
+        gir_com = re.compile(gir_reg)
+        gir_pic_list = re.findall(gir_com, context)
+        for gir_pic in gir_pic_list:
+            print gir_pic
+            for i in range(1, 16):
+                global ri
+                #urllib.urlretrieve(gir_pic + str(i) + ".jpg",  str(ri) + ".jpg")
+                downImage(gir_pic + str(i) + ".jpg", ri)
+                ri += 1
+        #print context
 
         
 while i <= 1:      #get every one url
     url  = mmurl + str(i) + ".html"
     i += 1
-    print url
+    #print url
     up = urllib2.urlopen(url)
     cont = up.read()
     getImg(cont)
