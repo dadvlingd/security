@@ -5,18 +5,19 @@ import re
 from urllib2 import HTTPError
 import urllib
 
-mmurl = "http://www.mm8mm8.com/xiurenmote/list_"
+mmurl = "http://www.mm8mm8.com/sexy/p"
 i = 1
+j = 4
 ph = -1
 temp = '''<img src="'''
 ri = 0
 
 def downImage(pic_url, name):
-    localPath = "/home/h/Downloads/" + str(name) + ".jpg"
+    localPath = "/home/hakits/Downloads/" + str(name) + ".jpg"
     try:
         request = urllib2.Request(pic_url)
         request.add_header("User-Agent", "fake-client")
-        response = urllib2.urlopen(request)
+        response = urllib2.urlopen(request, timeout = 4)
         f = file(localPath, "wb")
         f.write(response.read())
         f.close()
@@ -37,17 +38,17 @@ def getImg(html):
         gir_pic_list = re.findall(gir_com, context)
         for gir_pic in gir_pic_list:
             print gir_pic
-            for i in range(1, 16):
+            '''for i in range(1, 16):
                 global ri
                 #urllib.urlretrieve(gir_pic + str(i) + ".jpg",  str(ri) + ".jpg")
                 downImage(gir_pic + str(i) + ".jpg", ri)
-                ri += 1
+                ri += 1'''
         #print context
 
         
-while i <= 1:      #get every one url
-    url  = mmurl + str(i) + ".html"
-    i += 1
+while j <= 8:      #get every one url
+    url  = mmurl + str(j) + ".html"
+    j += 1
     #print url
     up = urllib2.urlopen(url)
     cont = up.read()
