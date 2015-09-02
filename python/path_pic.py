@@ -21,6 +21,9 @@ def downImage(pic_url, name):
         pass
 
 
+http://www.meinvsushe.com/
+http://meizi.us/
+https://www.leonax.net/res/
 mmurl = "http://t1.mm8mm8.com/mm8/tupai/20"
 
 x = range(12, 16) #year y
