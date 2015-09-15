@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(filename='F:\\meizi.log', level=logging.DEBUG)
 
 HOST = 'http://meizi.us/?page='
-PATH = 'F:\\meizi'
+PATH = '/home/hakits/Downloads'
 
 def get_meinv_url(url_queue):
     for i in range(1, 120):
