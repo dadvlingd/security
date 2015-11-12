@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 			printf("Failed to create new file !\n");
 		}
 		else 
-		{
+				{
 			printf("create new file successed !\n");
 			fseek(fp,0,SEEK_SET);
 			fseek(fp,0,SEEK_END);
