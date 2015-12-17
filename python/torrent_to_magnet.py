@@ -14,6 +14,7 @@ sys.setdefaultencoding('utf8') #解决 python的str默认是ascii编码，和uni
 
 def Usage():
     print "Usage: %s dir" % sys.argv[0]
+
 def get_file_name(rootdir):
     for lists in os.listdir(rootdir):
         t_file = os.path.join(rootdir, lists)
@@ -36,7 +37,10 @@ def torrent_to_magnet(t_file):
     magnet_file.close()
 
 if __name__ == '__main__':
-    magnet_file = open('magnet.txt', 'w')
+    if len(sys.argv) < 2:
+        Usage()
+        sys.exit(0)
+    magnet_file = open('magnet.txt', 'w') #清空文件
     magnet_file.close()
     get_file_name(sys.argv[1])
 
