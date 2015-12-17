@@ -1,4 +1,5 @@
-﻿# -*- coding: cp936 -*- # 
+﻿#!/usr/bin/python
+# -*- coding:utf-8 -*-
 
 # A keyboard recording trojan
 # Copyright (c) 2015 Jackeriss.
