@@ -25,6 +25,18 @@ def tryToGet(url):
 
     return None #超过5次访问失败，返回空值
 
+#get picture numbers
+def getPicnum(url):
+    pic_num = tryToGet(url)
+    if pic_num != None:
+        pic_html = pic_num.decode('utf-8')
+        ppp = re.compile(r'(?<=<h1>).*(?=P]<\/h1>)')
+        list_num = ppp.findall(pic_html)
+        str_num = str(list_num) #转换成字符串，方便切片
+
+        girl_num = int((str_num.split("[")[2].split("'")[0]))
+        return girl_num
+
 #get every person url
 def getPersonurl(url):
     p_response = tryToGet(url)
@@ -51,7 +63,7 @@ def getSubpage(url):
 imgCount = 1#图片计数器
 def saveImgInPage(url):
     global imgCount
-    print('**********正在获取页面' + url)
+    #print('**********正在获取页面' + url)
     response = tryToGet(url)
     if response != None:
         html = response.decode('utf-8')
@@ -81,15 +93,18 @@ def work():
     subpageList = getSubpage(url)#获取子页面
     subpageList.insert(0, '')#加入首页
 
-    i = 0
     for each in subpageList:#爬取每个页面上的图片
         Person_urlList = getPersonurl(url + each)
-        print (Person_urlList)
-        for personurl in Person_urlList:
-            print (url + Person_urlList[i + 2])
-            i = i + 1
-            #print (url + each + personurl)
-            #saveImgInPage(url + each + personurl)
+        for i in range(0, len(Person_urlList), 2):  #每个页面中有两个有效url故只能保留一个
+            personurl = url + Person_urlList[i]
+            gir_num = getPicnum(personurl)  #get sum of everygirl's pic 
+            print (gir_num)
+            for num in range(1, gir_num + 1): 
+                girurl = personurl.split("-")[0] + "-" + str(num) + ".html" #get every pic's url
+                #print (girurl)
+                #print (personurl.split("-")[-1])
+                #print (personurl)
+                saveImgInPage(girurl)  #downlaod image
     
 
 if __name__ == '__main__':
