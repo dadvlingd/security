@@ -35,7 +35,14 @@ def getPicnum(url):
         str_num = str(list_num) #转换成字符串，方便切片
 
         girl_num = int((str_num.split("[")[2].split("'")[0]))
+        title_name = str_num.split("[")[1].split("'")[1] # get 标题名字
+        os.mkdir(title_name) #make new dir
+        os.chdir(title_name)
+
         return girl_num
+    else:
+        print('********cant not get ipic num')
+        return list()
 
 #get every person url
 def getPersonurl(url):
@@ -61,8 +68,8 @@ def getSubpage(url):
         return list()
 
 imgCount = 1#图片计数器
-def saveImgInPage(url):
-    global imgCount
+def saveImgInPage(url, num):
+    #global imgCount
     #print('**********正在获取页面' + url)
     response = tryToGet(url)
     if response != None:
@@ -72,39 +79,42 @@ def saveImgInPage(url):
         imgList = p.findall(html)
 
         for each in imgList:
-            print ("\n%s" % imgList)
-            '''response = tryToGet(each)
+            #print ("\n%s" % imgList)
+            response = tryToGet(each)
             if response != None:
                 #保存图片
-                with open(str(imgCount) + '.jpg', 'wb') as f:
+                with open(str(num) + '.jpg', 'wb') as f:
                     f.write(response)
-                print('**********目前已成功获取%d张图片!' % imgCount)
-                imgCount += 1'''
+                #print('**********目前已成功获取%d张图片!' % imgCount)
+                #imgCount += 1
 
     else:
         print('**********当前页面获取失败!')
 
 def work():
-    if not os.path.isdir('妹子图'):
-        os.mkdir('妹子图')
-    os.chdir('妹子图')
+    if not os.path.isdir('Girl'):
+        os.mkdir('Girl')
+    os.chdir('Girl')
     
+    PWD = os.getcwd()
+
     url = 'http://www.chunmm.com/'
     subpageList = getSubpage(url)#获取子页面
     subpageList.insert(0, '')#加入首页
 
-    for each in subpageList:#爬取每个页面上的图片
+    for each in subpageList:  #爬取每个页面上的图片
         Person_urlList = getPersonurl(url + each)
         for i in range(0, len(Person_urlList), 2):  #每个页面中有两个有效url故只能保留一个
             personurl = url + Person_urlList[i]
+            os.chdir(PWD) #change to 主目录
             gir_num = getPicnum(personurl)  #get sum of everygirl's pic 
-            print (gir_num)
+            #print (gir_num)
             for num in range(1, gir_num + 1): 
                 girurl = personurl.split("-")[0] + "-" + str(num) + ".html" #get every pic's url
                 #print (girurl)
                 #print (personurl.split("-")[-1])
                 #print (personurl)
-                saveImgInPage(girurl)  #downlaod image
+                saveImgInPage(girurl, num)  #downlaod image
     
 
 if __name__ == '__main__':
