@@ -27,6 +27,15 @@ class MagentAPI:
         magnet_file = open('magnet.txt', 'a')
         magnet_file.write(magnet_url)
         magnet_file.close()
+        time.sleep(1)
+
+    def write_no_search(self, keyword):
+        print 'no search %s' % keyword
+        nofile = open('nosearch.txt', 'a')
+        nofile.write(keyword)
+        nofile.write('\n')
+        nofile.close()
+    
 
     def extractResults(self, html):
         if html != None:
@@ -55,7 +64,9 @@ class MagentAPI:
                 response = urllib2.urlopen(request)
                 html = response.read()
                 n = str(html).count(query)
+                print n
                 if n <= 8: #search no find result
+                    self.write_no_search(query)
                     break;
                 search_results = self.extractResults(html)
                 if len(search_results):
@@ -88,6 +99,9 @@ def searcher():
     #清空保存结果的文件
     magnet_file = open('magnet.txt', 'w')
     magnet_file.close()
+    #清空未搜到关键字的文件
+    magnet_file = open('nosearch.txt', 'w')
+    magnet_file.close()
     #Load use agent string form file
     load_user_agent()
 
@@ -104,7 +118,6 @@ def searcher():
             results = api.search(keyword, num = expect_num)
             #for r in results:
             keyword = keywords.readline().strip('\n')
-            print 'no input keyword'
     else:
         keyword = sys.argv[1]
         results = api.search(keyword, num = expect_num)
