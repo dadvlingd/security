@@ -12,6 +12,7 @@ import subprocess
 import MySQLdb
 import urllib2
 import json
+from IPy import IP
 
 class Database:
     host = '127.0.0.1'
@@ -58,7 +59,7 @@ def ip_range(start, end):
 #main function
 def bThread(iplist):
     threadl = []
-    threads = 300
+    threads = 10
     queue = Queue.Queue()
     hosts = iplist
     for host in hosts:
@@ -85,7 +86,7 @@ def getposition(host):
 class tThread(Thread):
     username = "admin"
     password = "admin"
-    TIMEOUT = 15
+    TIMEOUT = 10
 
     def __init__(self, queue):
         Thread.__init__(self)
@@ -153,8 +154,13 @@ if __name__ == '__main__':
         print '\033[1;33m[Success]\033[0m Mysql service is running ...'
         '''
     print "----------------------------------------------------------------"
-    startIp = raw_input('Start IP：')
-    endIp = raw_input('End IP：')
-    iplist = ip_range(startIp, endIp)
-    print '\nTotal '+str(len(iplist))+" IP...\n"
-    bThread(iplist)
+    file = open("ip_addr/ip.txt", "r")
+    while True:
+        line = file.readline()
+        if line:
+            iplist = IP(line) #转换成ip地址
+            print '\nTotal '+str(len(iplist))+" IP...\n"
+            bThread(iplist)
+        else:
+            break
+    file.close()

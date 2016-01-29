@@ -5,7 +5,7 @@
 
 import pymysql
 import requests
-import queue
+import Queue
 from threading import Thread
 import telnetlib
 import time
@@ -63,7 +63,7 @@ def ip_range(start, end):
 def bThread(iplist):
     threadl = []
     threads = 300 #------------------------------------------------------
-    queue1 = queue.Queue()
+    queue1 = Queue.Queue()
     hosts = iplist
     for host in hosts:
         queue1.put(host)
@@ -107,6 +107,7 @@ class tThread(Thread):
                 continue
 
     def telnet(self, host):
+        print host
         t = telnetlib.Telnet(host, timeout=self.TIMEOUT)
         t.read_until(b"username:", self.TIMEOUT)
         t.write(self.username.encode('ascii') + b"\n")
@@ -146,6 +147,6 @@ def run(startIp,endIp):
 
 
 if __name__ == '__main__':
-    startIp = input('Start IP：')
-    endIp = input('End IP：')
+    startIp = '222.8.1.1' #input('Start IP :')
+    endIp = '222.255.255.255' #input('End IP :')
     run(startIp, endIp)

@@ -1,5 +1,8 @@
 #!/usr/bin/python
-#-*- coding UTF-8 -*-
+#-*- coding=UTF-8 -*-
+
+#将所有IP段合并为一个文件
+#awk '{print $1,$2}' *.txt | sort | uniq > ip.txt
 
 import netaddr
 
